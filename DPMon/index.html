@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DPMon &mdash; DPMon  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="dpmon" href="_autosummary/dpmon.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            DPMon
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="_autosummary/dpmon.html">dpmon</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">DPMon</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">DPMon</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section class="tex2jax_ignore mathjax_ignore" id="dpmon">
+<h1>DPMon<a class="headerlink" href="#dpmon" title="Permalink to this heading"></a></h1>
+<p>Differentially-private query engine for Passive Network Measurements</p>
+<section id="objective">
+<h2>Objective<a class="headerlink" href="#objective" title="Permalink to this heading"></a></h2>
+<p>The goal of DPMon is not run privacy-preserving queries to a dataset of passive network measurements.
+It exploits differential privacy to the results of the query to control the contribution of a single individual to the query value.
+Thus, it mitigates the privacy risk in running and spreading network measurrments, allowing network practictioners and stakeholder to share valuable information about network operation, Quality of Service and cyber security threats.</p>
+<p>DPMon is designed to operate on flow records, a data format where each TCP or UDP flow consitutes and entry. Each flow is identified by its 5-tuple (IP addresses, port numbers and L4 protocol used) and described by a (rich set) of features, such as packet number and size, domain name, performance metrics (e.g., TCP Round-Trip Time).</p>
+</section>
+<section id="operation">
+<h2>Operation<a class="headerlink" href="#operation" title="Permalink to this heading"></a></h2>
+<p>DPMon exploits the mechanisms of Differential Privacy to add noise to a query’s result. In particular, it uses differentially-private mean, sum and histogram as offered by the IBM DiffPrivLib library.
+As network measurements are typically large, DPMon is designed to work above Apache Spark for scalable data processing, even if local processing is supported (but suitable only for small datasets).
+DPMon can read data in various formats, including NetFlow-like CSV files and Tstat log files</p>
+</section>
+<section id="pre-requisites">
+<h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this heading"></a></h2>
+<p>DPMon is a Python package and needs the following packages: <code class="docutils literal notranslate"><span class="pre">diffprivlib</span> <span class="pre">pandas</span> <span class="pre">numpy</span> <span class="pre">pandasql</span> <span class="pre">pyasn</span> <span class="pre">cachetools</span> <span class="pre">sphinx</span> <span class="pre">myst-parser</span> <span class="pre">linkify-it-py</span> <span class="pre">sphinx-rtd-theme</span></code>.
+Moreover, when operating on Spark, it is necessary to pass a <code class="docutils literal notranslate"><span class="pre">pyspark.sql.SparkSession</span></code> object as a Spark entrypoint</p>
+</section>
+<section id="supported-data-format">
+<h2>Supported data format<a class="headerlink" href="#supported-data-format" title="Permalink to this heading"></a></h2>
+<p>DPMon can read log files in two formats (so far):</p>
+<ul class="simple">
+<li><p>Tstat: log files created by <a class="reference external" href="http://tstat.polito.it/">Tstat</a>, a passive meter exporting rich flow records with hundreds of features, including packet and byte volume, TCP RTT, domain name, etc.</p></li>
+<li><p>NFDump: NetFlow records converted in <code class="docutils literal notranslate"><span class="pre">csv</span></code> using the standard NFDump tool. To convert a NetFlow database (created by NFCapd) in CSV, we assume you use the command <code class="docutils literal notranslate"><span class="pre">nfdump</span> <span class="pre">-r</span> <span class="pre">file</span> <span class="pre">-o</span> <span class="pre">extended</span> <span class="pre">-o</span> <span class="pre">csv</span></code>.</p></li>
+</ul>
+<p>Files must be available on the running machine in case of local processing and available to Spark Executors in case of Spark Execution mode.</p>
+<section id="flow-direction">
+<h3>Flow direction<a class="headerlink" href="#flow-direction" title="Permalink to this heading"></a></h3>
+<p>DPMon protects the privacy of users, thus, the operator must specify who are the users. You must pay attentiont to this step, as misconfiguration may lead to undesired privacy leaks.</p>
+<p>For both supported data formats, the logs specify flow direction: in case of Tstat, there are the <code class="docutils literal notranslate"><span class="pre">c_isint</span></code> and <code class="docutils literal notranslate"><span class="pre">s_isint</span></code> columns, while for NFDump, there is the <code class="docutils literal notranslate"><span class="pre">dir</span></code> field. DPMon assumes users to be protected are those flagged as clients in Tstat and source of outgoing flows (and destination of incoming ones) in NFDump. Verify your data follows this convetions.</p>
+<p>As a consequence of the design, DPMon cannot operate at the same time with incoming and outgoing flows. When starting DPMon, you must specify if you want to run queries on incoming or outgoing flows. Then, DPMon will operate to protect the privacy of internal clients (i.e., your users).</p>
+</section>
+</section>
+<section id="supported-engines">
+<h2>Supported engines<a class="headerlink" href="#supported-engines" title="Permalink to this heading"></a></h2>
+<p>By default DPMon processes data locally using Pandas. This is call as <code class="docutils literal notranslate"><span class="pre">local</span></code> engine.</p>
+<p>It is possible to use the <code class="docutils literal notranslate"><span class="pre">spark</span></code> enging, so that one can leverage a big data cluster to process large quantities of data. Cluster set up and configuration is not part of this guide.</p>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
+<p>To use DPMon, you must instantiate an object of the <code class="docutils literal notranslate"><span class="pre">dpmon.DPMon</span></code>, setting the total privacy budget. Then, you can use the class methods to run queries on the data, specifying the privacy budget to allocate to each query. Check the module documentation for details.</p>
+</section>
+<section id="limitations">
+<h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h2>
+<p>DPMon is prototype, thus inspect it carefully before using it in a production environment. Moreover, it is a library to be used by the system administrator to extract data. It shall not be used directly by an external analyst. In other words, consider to build a web service on top of it, to allow external use and enforce policies and priviledges.</p>
+</section>
+</section>
+<section id="api">
+<h1>API<a class="headerlink" href="#api" title="Permalink to this heading"></a></h1>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/dpmon.html#module-dpmon" title="dpmon"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dpmon</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="_autosummary/dpmon.html" class="btn btn-neutral float-right" title="dpmon" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Martino Trevisan.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
