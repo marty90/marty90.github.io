@@ -84,6 +84,7 @@ Thus, it mitigates the privacy risk in running and spreading network measurrment
 <p>DPMon exploits the mechanisms of Differential Privacy to add noise to a query’s result. In particular, it uses differentially-private mean, sum and histogram as offered by the IBM DiffPrivLib library.
 As network measurements are typically large, DPMon is designed to work above Apache Spark for scalable data processing, even if local processing is supported (but suitable only for small datasets).
 DPMon can read data in various formats, including NetFlow-like CSV files and Tstat log files</p>
+<p><strong>Autonomous System Mapping:</strong> DPMon supports query on the server IP’s autonomous system. To this end, it leverages the <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> library. You must provide DPMon with a <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> RIB file that containes the mapping between IPs and ASN. Please refer to <a class="reference external" href="https://github.com/hadiasghari/pyasn">PyASN documentation</a> to obtain an up-to-date data file.</p>
 </section>
 <section id="pre-requisites">
 <h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this heading"></a></h2>
@@ -108,11 +109,14 @@ Moreover, when operating on Spark, it is necessary to pass a <code class="docuti
 <section id="supported-engines">
 <h2>Supported engines<a class="headerlink" href="#supported-engines" title="Permalink to this heading"></a></h2>
 <p>By default DPMon processes data locally using Pandas. This is call as <code class="docutils literal notranslate"><span class="pre">local</span></code> engine.</p>
-<p>It is possible to use the <code class="docutils literal notranslate"><span class="pre">spark</span></code> enging, so that one can leverage a big data cluster to process large quantities of data. Cluster set up and configuration is not part of this guide.</p>
+<p>It is possible to use the <code class="docutils literal notranslate"><span class="pre">spark</span></code> engine, so that one can leverage a big data cluster to process large quantities of data. Cluster set up and configuration is not part of this guide.</p>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>To use DPMon, you must instantiate an object of the <code class="docutils literal notranslate"><span class="pre">dpmon.DPMon</span></code>, setting the total privacy budget. Then, you can use the class methods to run queries on the data, specifying the privacy budget to allocate to each query. Check the module documentation for details.</p>
+<p>To use DPMon, you must instantiate an object of the <code class="docutils literal notranslate"><span class="pre">dpmon.DPMon</span></code>, setting the total privacy budget. Then, you can use the class methods to run queries on the data, specifying the privacy budget to allocate to each query.
+The various methods allow you to run different queries on the data, such as byte-wise volume, number of flows, etc.
+You can make global queries or filter data by server IP address, ASN or domain.
+Check the module documentation for details and the exhaustive list.</p>
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h2>
