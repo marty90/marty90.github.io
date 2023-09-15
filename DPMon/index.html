@@ -75,16 +75,16 @@
 <section id="objective">
 <h2>Objective<a class="headerlink" href="#objective" title="Permalink to this heading"></a></h2>
 <p>The goal of DPMon is not run privacy-preserving queries to a dataset of passive network measurements.
-It exploits differential privacy to the results of the query to control the contribution of a single individual to the query value.
-Thus, it mitigates the privacy risk in running and spreading network measurrments, allowing network practictioners and stakeholder to share valuable information about network operation, Quality of Service and cyber security threats.</p>
-<p>DPMon is designed to operate on flow records, a data format where each TCP or UDP flow consitutes and entry. Each flow is identified by its 5-tuple (IP addresses, port numbers and L4 protocol used) and described by a (rich set) of features, such as packet number and size, domain name, performance metrics (e.g., TCP Round-Trip Time).</p>
+It applies Differential Privacy to the results of the query to control the contribution of a single individual to the query value.
+Thus, it mitigates the privacy risk of running and spreading network measurements, allowing network practitioners and stakeholders to share valuable information about network operation, Quality of Service and cyber security threats.</p>
+<p>DPMon is designed to operate on flow records, a data format where each TCP or UDP flow constitutes and entry. Each flow is identified by its 5-tuple (IP addresses, port numbers and L4 protocol used) and described by a (rich set) of features, such as packet number and size, domain name, performance metrics (e.g., TCP Round-Trip Time).</p>
 </section>
 <section id="operation">
 <h2>Operation<a class="headerlink" href="#operation" title="Permalink to this heading"></a></h2>
 <p>DPMon exploits the mechanisms of Differential Privacy to add noise to a query’s result. In particular, it uses differentially-private mean, sum and histogram as offered by the IBM DiffPrivLib library.
 As network measurements are typically large, DPMon is designed to work above Apache Spark for scalable data processing, even if local processing is supported (but suitable only for small datasets).
 DPMon can read data in various formats, including NetFlow-like CSV files and Tstat log files</p>
-<p><strong>Autonomous System Mapping:</strong> DPMon supports query on the server IP’s autonomous system. To this end, it leverages the <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> library. You must provide DPMon with a <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> RIB file that containes the mapping between IPs and ASN. Please refer to <a class="reference external" href="https://github.com/hadiasghari/pyasn">PyASN documentation</a> to obtain an up-to-date data file.</p>
+<p><strong>Autonomous System Mapping:</strong> DPMon supports query on the server IP’s autonomous system. To this end, it leverages the <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> library. You must provide DPMon with a <code class="docutils literal notranslate"><span class="pre">pyasn</span></code> RIB file that contains the mapping between IPs and ASN. Please refer to <a class="reference external" href="https://github.com/hadiasghari/pyasn">PyASN documentation</a> to obtain an up-to-date data file.</p>
 </section>
 <section id="pre-requisites">
 <h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this heading"></a></h2>
@@ -101,8 +101,8 @@ Moreover, when operating on Spark, it is necessary to pass a <code class="docuti
 <p>Files must be available on the running machine in case of local processing and available to Spark Executors in case of Spark Execution mode.</p>
 <section id="flow-direction">
 <h3>Flow direction<a class="headerlink" href="#flow-direction" title="Permalink to this heading"></a></h3>
-<p>DPMon protects the privacy of users, thus, the operator must specify who are the users. You must pay attentiont to this step, as misconfiguration may lead to undesired privacy leaks.</p>
-<p>For both supported data formats, the logs specify flow direction: in case of Tstat, there are the <code class="docutils literal notranslate"><span class="pre">c_isint</span></code> and <code class="docutils literal notranslate"><span class="pre">s_isint</span></code> columns, while for NFDump, there is the <code class="docutils literal notranslate"><span class="pre">dir</span></code> field. DPMon assumes users to be protected are those flagged as clients in Tstat and source of outgoing flows (and destination of incoming ones) in NFDump. Verify your data follows this convetions.</p>
+<p>DPMon protects the privacy of users, thus, the operator must specify who are the users. You must pay attention to this step, as misconfiguration may lead to undesired privacy leaks.</p>
+<p>For both supported data formats, the logs specify flow direction: in case of Tstat, there are the <code class="docutils literal notranslate"><span class="pre">c_isint</span></code> and <code class="docutils literal notranslate"><span class="pre">s_isint</span></code> columns, while for NFDump, there is the <code class="docutils literal notranslate"><span class="pre">dir</span></code> field. DPMon assumes users to be protected are those flagged as clients in Tstat and source of outgoing flows (and destination of incoming ones) in NFDump. Verify your data follows these conventions.</p>
 <p>As a consequence of the design, DPMon cannot operate at the same time with incoming and outgoing flows. When starting DPMon, you must specify if you want to run queries on incoming or outgoing flows. Then, DPMon will operate to protect the privacy of internal clients (i.e., your users).</p>
 </section>
 </section>
@@ -115,12 +115,12 @@ Moreover, when operating on Spark, it is necessary to pass a <code class="docuti
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
 <p>To use DPMon, you must instantiate an object of the <code class="docutils literal notranslate"><span class="pre">dpmon.DPMon</span></code>, setting the total privacy budget. Then, you can use the class methods to run queries on the data, specifying the privacy budget to allocate to each query.
 The various methods allow you to run different queries on the data, such as byte-wise volume, number of flows, etc.
-You can make global queries or filter data by server IP address, ASN or domain.
-Check the module documentation for details and the exhaustive list.</p>
+You can make global queries or filter data by server IP address, ASN or domain.</p>
+<p>Check the module <a class="reference external" href="https://marty90.github.io/DPMon/index.html">documentation</a> for details and the exhaustive list.</p>
 </section>
 <section id="limitations">
 <h2>Limitations<a class="headerlink" href="#limitations" title="Permalink to this heading"></a></h2>
-<p>DPMon is prototype, thus inspect it carefully before using it in a production environment. Moreover, it is a library to be used by the system administrator to extract data. It shall not be used directly by an external analyst. In other words, consider to build a web service on top of it, to allow external use and enforce policies and priviledges.</p>
+<p>DPMon is prototype, thus inspect it carefully before using it in a production environment. Moreover, it is a library to be used by the system administrator to extract data. It shall not be used directly by an external analyst. In other words, consider to build a web service on top of it, to allow external use and enforce policies and privileges.</p>
 </section>
 </section>
 <section id="api">
