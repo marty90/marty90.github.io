@@ -47,10 +47,12 @@
 <li class="toctree-l3"><a class="reference internal" href="#dpmon.DPMon"><code class="docutils literal notranslate"><span class="pre">DPMon</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.__init__"><code class="docutils literal notranslate"><span class="pre">DPMon.__init__()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.flow_feature"><code class="docutils literal notranslate"><span class="pre">DPMon.flow_feature()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.user_count_specific"><code class="docutils literal notranslate"><span class="pre">DPMon.user_count_specific()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_historam"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_historam()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_historam_specific"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_historam_specific()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_on_asn"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_on_asn()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_on_domain"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_on_domain()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_on_domain_pattern"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_on_domain_pattern()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#dpmon.DPMon.volume_on_ip"><code class="docutils literal notranslate"><span class="pre">DPMon.volume_on_ip()</span></code></a></li>
 </ul>
 </li>
@@ -125,7 +127,7 @@ Default: <code class="docutils literal notranslate"><span class="pre">None</span
 </table>
 <dl class="py method">
 <dt class="sig sig-object py" id="dpmon.DPMon.flow_feature">
-<span class="sig-name descname"><span class="pre">flow_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dpmon.DPMon.flow_feature" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">flow_feature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">feature</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metric</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">percent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bins</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dpmon.DPMon.flow_feature" title="Permalink to this definition"></a></dt>
 <dd><p>Extract statistics on a flow feature (i.e., a log’s column).
 Notice that this can be used only with Tstat data and on a subset of columns.
 Notice that DPMon first computes the average per-user value of the flow features.
@@ -137,8 +139,37 @@ The three filters are considered together (i.e., they form an AND clause).</p>
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>feature</strong> (<em>str</em>) – The flow feature to compute statistics on.</p></li>
-<li><p><strong>metric</strong> (<em>str</em>) – The metric to compute. Can be <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">std</span></code> or <code class="docutils literal notranslate"><span class="pre">percentile</span></code></p></li>
+<li><p><strong>metric</strong> (<em>str</em>) – The metric to compute. Can be <code class="docutils literal notranslate"><span class="pre">mean</span></code>, <code class="docutils literal notranslate"><span class="pre">std</span></code>, <code class="docutils literal notranslate"><span class="pre">histogram</span></code> or <code class="docutils literal notranslate"><span class="pre">percentile</span></code></p></li>
 <li><p><strong>percent</strong> (<em>float</em>) – The percentile to compute in case <code class="docutils literal notranslate"><span class="pre">metric==percentile</span></code></p></li>
+<li><p><strong>ip</strong> (<em>str</em>) – The server IP to filter. 
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>asn</strong> (<em>int</em>) – The server ASN to filter. 
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>domain</strong> (<em>str</em>) – The server domain to filter. 
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>epsilon</strong> (<em>float</em>) – The privacy budget to allocate for the query. Default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></li>
+<li><p><strong>bins</strong> (<em>int</em>) – Number of bins of the histogram in case <code class="docutils literal notranslate"><span class="pre">metric==histogram</span></code>. .
+Default: <code class="docutils literal notranslate"><span class="pre">10</span></code></p></li>
+<li><p><strong>range</strong> (<em>(</em><em>float</em><em>,</em><em>float</em><em>)</em>) – The lower and upper range of the bins of the histogram in case <code class="docutils literal notranslate"><span class="pre">metric==histogram</span></code>. 
+Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The desired statistic</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dpmon.DPMon.user_count_specific">
+<span class="sig-name descname"><span class="pre">user_count_specific</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">domain</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dpmon.DPMon.user_count_specific" title="Permalink to this definition"></a></dt>
+<dd><p>Compute a the number of users on given server IP, domain or ASN.
+In other words, it computes the number of users who, at least once, issued a flow to the an enpoint with the given characteristics.
+The three filters are considered together (i.e., they form an AND clause).
+It returns the number of user matching and the number of user non matching the filter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><strong>ip</strong> (<em>str</em>) – The server IP to filter. 
 Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>asn</strong> (<em>int</em>) – The server ASN to filter. 
@@ -149,7 +180,10 @@ Default: <code class="docutils literal notranslate"><span class="pre">None</span
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The desired statistic</p>
+<dd class="field-even"><p>A tuple <code class="docutils literal notranslate"><span class="pre">(a,</span> <span class="pre">b)</span></code>, where <code class="docutils literal notranslate"><span class="pre">a</span></code> is the number of users who never matched the filter and  <code class="docutils literal notranslate"><span class="pre">n</span></code> the number of users who did at least once.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple</p>
 </dd>
 </dl>
 </dd></dl>
@@ -247,6 +281,34 @@ Default: <code class="docutils literal notranslate"><span class="pre">False</spa
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>domain</strong> (<em>str</em>) – The domain name to query</p></li>
+<li><p><strong>volume_direction</strong> (<em>str</em>) – Whether to compute ingress (<code class="docutils literal notranslate"><span class="pre">&quot;ingoing&quot;</span></code>) or egress (<code class="docutils literal notranslate"><span class="pre">&quot;outgoing&quot;</span></code>) volume, in bytes.
+Default: <code class="docutils literal notranslate"><span class="pre">&quot;ingoing&quot;</span></code></p></li>
+<li><p><strong>count_flows</strong> (<em>bool</em>) – Count the number of flows instead of volume. If set, <code class="docutils literal notranslate"><span class="pre">&quot;volume_direction&quot;</span></code> is ignored.
+Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>epsilon</strong> (<em>float</em>) – The privacy budget to allocate for the query. Default: <code class="docutils literal notranslate"><span class="pre">1.0</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The volume in bytes of number of flows</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="dpmon.DPMon.volume_on_domain_pattern">
+<span class="sig-name descname"><span class="pre">volume_on_domain_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">volume_direction</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ingoing'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count_flows</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#dpmon.DPMon.volume_on_domain_pattern" title="Permalink to this definition"></a></dt>
+<dd><p>Obtain the traffic volume to/from a specific domain pattern.
+The function searches for flows to a domain that matches the given pattern.
+Pattern are defined in the SQL style, thus for example the <code class="docutils literal notranslate"><span class="pre">%</span></code> character represents any string of zero or more characters,
+while <code class="docutils literal notranslate"><span class="pre">_</span></code> represents any single character. 
+This function is useful to obtain the traffic volume by second level domain, e.g., <code class="docutils literal notranslate"><span class="pre">%.googlevideo.com</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pattern</strong> (<em>str</em>) – The domain pattern (in SQL syntax) to query</p></li>
 <li><p><strong>volume_direction</strong> (<em>str</em>) – Whether to compute ingress (<code class="docutils literal notranslate"><span class="pre">&quot;ingoing&quot;</span></code>) or egress (<code class="docutils literal notranslate"><span class="pre">&quot;outgoing&quot;</span></code>) volume, in bytes.
 Default: <code class="docutils literal notranslate"><span class="pre">&quot;ingoing&quot;</span></code></p></li>
 <li><p><strong>count_flows</strong> (<em>bool</em>) – Count the number of flows instead of volume. If set, <code class="docutils literal notranslate"><span class="pre">&quot;volume_direction&quot;</span></code> is ignored.
